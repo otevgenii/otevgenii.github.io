@@ -62,9 +62,12 @@
             <p>Оставьте вашу просьбу, и я помолюсь за вас</p>
         </header>
 
-        
-   <form id="myForm" action="https://formspree.io/f/mwplpkrv" method="POST">
-                <div class="form-group">
+
+<!-- В HTML исправляем id формы на "prayer-form" -->
+<form id="prayer-form" action="https://formspree.io/f/mwplpkrv" method="POST">
+    <!-- Остальное содержимое формы без изменений -->
+
+   <div class="form-group">
                     <label for="name">Имя:</label>
                     <input type="text" id="name" name="name" required>
                 </div>
@@ -79,6 +82,59 @@
                 <button type="submit">Отправить</button>
  
  </form>
+
+
+<script>
+// Исправленный JavaScript
+document.getElementById('prayer-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim(); // Исправлено с request на message
+
+    if (!name || !message) { // Проверяем message вместо request
+        alert('Пожалуйста, заполните все обязательные поля.');
+        return;
+    }
+
+    // Отправка формы через Fetch API
+    fetch(this.action, {
+        method: this.method,
+        body: new FormData(this),
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Ваш запрос успешно отправлен!');
+            this.reset();
+        } else {
+            response.json().then(data => {
+                if (data.error) {
+                    alert('Ошибка отправки: ' + data.error);
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Произошла ошибка при отправке формы');
+    });
+});
+</script>
+
+
+<input type="hidden" name="_next" value="thanks.html">
+
+
+
+<input type="text" name="_gotcha" style="display:none">
+
+
+
+             
 
 
 <br><br><br><br><br><br>
